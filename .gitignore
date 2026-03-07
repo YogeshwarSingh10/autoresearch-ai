@@ -6,7 +6,6 @@ __pycache__/
 
 # Virtual environments
 venv/
-.env/
 .venv/
 
 # VSCode
@@ -14,4 +13,6 @@ venv/
 
 # OS files
 .DS_Store
-Thumbs.db
+build/
+*egg-info/
+.env
