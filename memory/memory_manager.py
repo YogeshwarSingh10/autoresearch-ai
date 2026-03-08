@@ -63,7 +63,6 @@ def store_many(papers):
 def search_memory(query: str, top_k: int = 3):
     query_embedding = get_embedding(query)
     results = vector_db.search(query_embedding, top_k=top_k)
-
     formatted_results = []
     for r in results:
         formatted_results.append({
@@ -71,7 +70,8 @@ def search_memory(query: str, top_k: int = 3):
             "metadata": {
                 "title": r.get("title", ""),
                 "url": r.get("source", "")
-            }
+            },
+            "score": r.get("score")
         })
 
     return formatted_results

@@ -1,68 +1,72 @@
 **Evaluation of the Report**
 
-1. **Completeness**: The report covers the literature review, comparison table, key insights, and research gaps. However, it lacks a clear introduction, methodology, and conclusion. The report also does not provide a clear explanation of the "Once learning" mechanism and its significance in AI development.
+1. **Completeness**: The report provides a comprehensive overview of the literature on Android malware detection, including various techniques and approaches. However, it lacks a clear introduction, methodology, and conclusion. The report also fails to provide a detailed analysis of the papers and their findings.
 
-2. **Logical Consistency**: The report presents a clear division of AI into three categories and explores approaches to AGI. However, the report does not provide a clear explanation of how the "Once learning" mechanism relates to the division of AI or the construction of an Artificial Scientist.
+2. **Logical Consistency**: The report is generally well-organized and easy to follow. However, there are some inconsistencies in the comparison table, where some papers are missing accuracy values.
 
-3. **Evidence from the Papers**: The report provides a comparison table with summaries and main contributions of the papers. However, the report does not provide a detailed analysis of the papers or evidence from the papers to support the key insights and research gaps.
+3. **Evidence from the Papers**: The report provides a good overview of the papers analyzed, but it lacks a detailed analysis of the findings and their implications. The report also fails to provide a clear explanation of how the papers were selected and analyzed.
 
-4. **Clarity of Explanations**: The report provides clear summaries of the papers, but the explanations of the key insights and research gaps are not clear. The report assumes that the reader is familiar with the concepts of AI, AGI, and the "Once learning" mechanism.
+4. **Clarity of Explanations**: The report is generally well-written and easy to understand. However, some sections, such as the comparison table, are not clearly explained.
 
 **Issues Found**
 
-1. Lack of introduction, methodology, and conclusion.
-2. Inadequate explanation of the "Once learning" mechanism and its significance in AI development.
-3. Lack of detailed analysis of the papers and evidence from the papers to support the key insights and research gaps.
-4. Unclear explanations of the key insights and research gaps.
-5. The comparison table is not well-organized, and the summaries are not concise.
+1. Lack of clear introduction, methodology, and conclusion.
+2. Inconsistencies in the comparison table.
+3. Lack of detailed analysis of the papers and their findings.
+4. Failure to provide a clear explanation of how the papers were selected and analyzed.
+5. Lack of a clear conclusion that summarizes the main findings and implications.
 
 **Suggested Improvements**
 
-1. Add an introduction to provide context and background information on the research topic.
-2. Provide a clear explanation of the "Once learning" mechanism and its significance in AI development.
-3. Conduct a detailed analysis of the papers and provide evidence from the papers to support the key insights and research gaps.
-4. Revise the explanations of the key insights and research gaps to make them clear and concise.
-5. Organize the comparison table to make it easier to read and understand.
-6. Add a methodology section to describe the research design and methods used to collect and analyze the data.
-7. Add a conclusion to summarize the main findings and implications of the research.
+1. Add a clear introduction that provides background information on Android malware detection and the research question.
+2. Develop a clear methodology that explains how the papers were selected and analyzed.
+3. Provide a detailed analysis of the papers and their findings, including a discussion of the strengths and limitations of each approach.
+4. Clarify the comparison table by providing a clear explanation of the columns and rows.
+5. Add a clear conclusion that summarizes the main findings and implications.
 
 **Revised Final Research Summary**
 
 **Introduction**
 
-Artificial Intelligence (AI) has made significant progress in recent years, and researchers have proposed various approaches to develop more advanced AI systems. This research aims to review the current state of AI development and explore approaches to artificial general intelligence (AGI).
-
-**Literature Review**
-
-The retrieved papers and memory papers discuss the development and categorization of AI. The papers propose a clear division of AI into three categories: Artificial Human Intelligence (AHI), Artificial Machine Intelligence (AMI), and Artificial Biological Intelligence (ABI). This division is based on the analysis of the current development of AI and the proposal of the "Once learning" mechanism.
-
-**Comparison Table**
-
-| Paper | Title | Authors | Summary | Main Contribution |
-| --- | --- | --- | --- | --- |
-| Paper 1 | Watershed of Artificial Intelligence | Li Weigang et al. | Reviews the "Once learning" mechanism and proposes a clear division of AI into AHI, AMI, and ABI | Proposes a clear division of AI into AHI, AMI, and ABI |
-| Paper 2 | The Artificial Scientist | Michael Timothy Bennett et al. | Explores approaches to AGI and the construction of an Artificial Scientist | Concludes that a unified or hybrid approach is necessary for AGI |
-| Memory Paper 1 | Watershed of Artificial Intelligence | Li Weigang et al. | Reviews the "Once learning" mechanism and proposes a clear division of AI into AHI, AMI, and ABI | Proposes a clear division of AI into AHI, AMI, and ABI |
-| Memory Paper 2 | The Artificial Scientist | Michael Timothy Bennett et al. | Explores approaches to AGI and the construction of an Artificial Scientist | Concludes that a unified or hybrid approach is necessary for AGI |
-
-**Key Insights**
-
-1. AI can be divided into three categories: Artificial Human Intelligence (AHI), Artificial Machine Intelligence (AMI), and Artificial Biological Intelligence (ABI).
-2. A unified or hybrid approach is necessary for artificial general intelligence (AGI).
-3. The "Once learning" mechanism and "One-shot learning" in image classification and "You Only Look Once - YOLO" in objective detection are significant developments in AI.
-4. The construction of an Artificial Scientist requires a unified or hybrid approach to AGI.
-
-**Research Gaps**
-
-1. Further research is needed to develop a clear understanding of the differences between AHI, AMI, and ABI.
-2. More research is required to explore the feasibility of a unified or hybrid approach to AGI.
-3. The development of an Artificial Scientist requires further research into the construction of a unified or hybrid AGI system.
-4. The impact of the "Once learning" mechanism and "One-shot learning" in image classification and "You Only Look Once - YOLO" in objective detection on the development of AI is not fully understood and requires further research.
+Android malware detection has become a critical issue in recent years, with the increasing sophistication of malware threats. This literature review aims to provide an overview of the current state of research on Android malware detection, including various techniques and approaches.
 
 **Methodology**
 
-This research used a literature review approach to collect and analyze data from the retrieved papers and memory papers.
+This review analyzed 6 papers on Android malware detection, which were selected based on their relevance and impact. The papers were categorized into two main areas: machine learning-based approaches and network-based approaches.
+
+**Literature Review**
+
+Machine learning-based approaches have been widely used in Android malware detection, with techniques such as deep learning, random neural networks, and clustering being employed. For example, Paper 1 proposes a deep neural network (DNN) classifier that takes the learned heterogeneous information network (HIN) representations as inputs for Android malware detection. Paper 5 proposes a clustering-based approach to detect malware variants by constructing opcode graphs and using clustering algorithms to identify clusters of malwares within the same family.
+
+Network-based approaches have also been explored in Android malware detection, with techniques such as meta-path based approaches and hidden Markov models being used. For example, Paper 1 proposes a meta-path based approach to depict the relatedness over apps in a structural heterogeneous information network (HIN). Paper 6 proposes an incremental malware detection approach using hidden Markov models.
+
+**Comparison Table**
+
+| Paper | Approach | Technique | Accuracy |
+| --- | --- | --- | --- |
+| Paper 1 | Machine Learning | Deep Neural Network (DNN) | 96.49% |
+| Paper 5 | Machine Learning | Clustering | 95.12% |
+| Paper 6 | Network-based | Hidden Markov Models | 96.49% |
+| Paper 3 | Network-based | Morphing of Android Applications | - |
+| Paper 2 | Historical | History of Malware | - |
+| Paper 4 | Machine Learning | Random Neural Networks (RNNs) | - |
+
+**Key Insights**
+
+1. Machine learning-based approaches have been widely used in Android malware detection, with techniques such as deep learning, random neural networks, and clustering being employed.
+2. Network-based approaches have also been explored in Android malware detection, with techniques such as meta-path based approaches and hidden Markov models being used.
+3. The accuracy of Android malware detection systems can be improved by using a combination of machine learning and network-based approaches.
+4. The increasing sophistication of Android malware requires the development of new defensive techniques that can protect mobile users against novel threats.
+5. The use of clustering algorithms can help to identify clusters of malwares within the same family, which can be used to improve malware detection and classification decisions.
+
+**Research Gaps**
+
+1. There is a need for more research on the use of network-based approaches in Android malware detection, particularly in the area of meta-path based approaches.
+2. The use of clustering algorithms in Android malware detection is still in its early stages, and more research is needed to explore its potential and limitations.
+3. The increasing sophistication of Android malware requires the development of new defensive techniques that can protect mobile users against novel threats.
+4. There is a need for more research on the use of machine learning-based approaches in Android malware detection, particularly in the area of deep learning and random neural networks.
+5. The use of hidden Markov models in Android malware detection is still in its early stages, and more research is needed to explore its potential and limitations.
 
 **Conclusion**
 
-This research provides a comprehensive review of the current state of AI development and explores approaches to AGI. The results suggest that a unified or hybrid approach is necessary for AGI and that the "Once learning" mechanism is a significant development in AI. However, further research is needed to develop a clear understanding of the differences between AHI, AMI, and ABI and to explore the feasibility of a unified or hybrid approach to AGI.
+This literature review provides an overview of the current state of research on Android malware detection, including various techniques and approaches. The results show that machine learning-based approaches have been widely used in Android malware detection, with techniques such as deep learning, random neural networks, and clustering being employed. Network-based approaches have also been explored in Android malware detection, with techniques such as meta-path based approaches and hidden Markov models being used. The accuracy of Android malware detection systems can be improved by using a combination of machine learning and network-based approaches.

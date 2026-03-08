@@ -63,15 +63,13 @@ def retriever_agent(planner_output):
     for query in queries[:5]:
 
         print(f"\nProcessing query: {query}\n")
-
-        # STEP 1 — check memory
         memory_hits = search_memory(query)
-
-        print(f"Memory hits: {len(memory_hits)}")
+        threshold = 0.8
+        memory_hits = [m for m in memory_hits if m["score"] > threshold]
+        print(f"Valid Memory hits: {len(memory_hits)}")
 
         if memory_hits:
-            print("Found papers in memory")
-
+            print("Found relevant papers in memory")
             papers = [
                 {
                     "title": m["metadata"]["title"],
@@ -80,13 +78,9 @@ def retriever_agent(planner_output):
                 }
                 for m in memory_hits
             ]
-
         else:
             print("Searching arXiv")
-
             papers = search_arxiv(query, max_results=2)
-
-            # STEP 2 — store new papers in memory
             store_many(papers)
 
         for p in papers:
