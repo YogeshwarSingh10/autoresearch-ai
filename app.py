@@ -1,4 +1,6 @@
 from dotenv import load_dotenv
+load_dotenv()
+
 import streamlit as st
 
 from agents.planner_agent import planner_agent
@@ -6,8 +8,6 @@ from agents.retriever_agent import retriever_agent
 from agents.executor_agent import executor_agent
 from agents.critic_agent import critic_agent
 from memory.memory_manager import MemoryManager
-
-load_dotenv()
 
 st.set_page_config(
     page_title="AutoResearch AI",
