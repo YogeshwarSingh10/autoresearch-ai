@@ -134,4 +134,4 @@ if st.button("🚀 Start Research"):
             st.write("No relevant memory retrieved.")
 
         st.subheader("Executor Analysis")
-        st.write(analysis)
+        st.markdown(analysis)
