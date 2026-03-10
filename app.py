@@ -124,17 +124,11 @@ if st.button("🚀 Start Research"):
             st.write("No papers retrieved.")
 
         st.subheader("Memory Context Used")
-
         if memory_context:
             for item in memory_context:
-
-                text = item.get("text", "")
-                metadata = item.get("metadata", {})
-
-                st.write("Title:", metadata.get("title", ""))
-                st.write("Snippet:", text[:200])
-                st.write("URL:", metadata.get("url", ""))
-
+                st.write("Title:", item.get("title", ""))
+                st.write("Snippet:", (item.get("content", ""))[:200])
+                st.write("URL:", item.get("source", ""))
                 st.divider()
         else:
             st.write("No relevant memory retrieved.")

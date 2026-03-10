@@ -5,7 +5,7 @@ from openai import OpenAI
 from memory.memory_manager import MemoryManager
 from tools.search import search_arxiv
 
-
+RETRIEVAL_THRESHOLD=0.65
 # Groq API client
 client = OpenAI(
     api_key=os.getenv("GROQ_API_KEY"),
@@ -63,32 +63,23 @@ def retriever_agent(planner_output, memory: MemoryManager):
     for query in queries[:5]:
 
         print(f"\nProcessing query: {query}\n")
-
-        # STEP 1 — check memory
         memory_hits = memory.search(query)
-
-        print(f"Memory hits: {len(memory_hits)}")
+        memory_hits = [m for m in memory_hits if m["score"] > RETRIEVAL_THRESHOLD]
+        print(f"Valid Memory hits: {len(memory_hits)}")
 
         if memory_hits:
-
-            print("Found papers in memory")
-
+            print("Found relevant papers in memory")
             papers = [
                 {
-                    "title": m["metadata"]["title"],
-                    "summary": m["text"],
-                    "url": m["metadata"]["url"]
+                    "title": m["title"],
+                    "summary": m["content"],
+                    "url": m["source"]
                 }
                 for m in memory_hits
             ]
-
         else:
-
             print("Searching arXiv")
-
-            papers = search_arxiv(query, max_results=5)
-
-            # STEP 2 — store new papers in memory
+            papers = search_arxiv(query, max_results=2)
             memory.store_many(papers)
 
         for p in papers:

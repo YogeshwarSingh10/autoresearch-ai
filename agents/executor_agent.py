@@ -1,6 +1,8 @@
 import os
 from openai import OpenAI
 
+from memory.memory_manager import MemoryManager
+
 
 # Groq API client
 client = OpenAI(
@@ -8,7 +10,7 @@ client = OpenAI(
     base_url="https://api.groq.com/openai/v1"
 )
 
-
+EXECUTOR_THRESHOLD=0.65
 def format_papers(papers):
 
     formatted = ""
@@ -30,23 +32,18 @@ URL: {paper['url']}
 
 
 def format_memory(memory_hits):
-
     formatted = ""
-
     for i, item in enumerate(memory_hits, 1):
-
         formatted += f"""
 Memory Paper {i}
-Title: {item['metadata']['title']}
-Summary: {item['text']}
-URL: {item['metadata']['url']}
-
+Title: {item['title']}
+Summary: {item['content']}
+URL: {item['source']}
 """
-
     return formatted
 
 
-def executor_agent(papers, memory):
+def executor_agent(papers, memory: MemoryManager):
 
     papers_text = format_papers(papers)
 
@@ -55,11 +52,9 @@ def executor_agent(papers, memory):
     # -------------------------
 
     query = papers[0]["title"] if papers else ""
-
-    memory_hits = memory.search(query)[:2] if query else []
+    memory_hits = [m for m in memory.search(query) if m["score"] > EXECUTOR_THRESHOLD][:2] if query else []
 
     print(f"\nExecutor memory hits: {len(memory_hits)}\n")
-
     memory_text = format_memory(memory_hits) if memory_hits else ""
 
     # -------------------------
