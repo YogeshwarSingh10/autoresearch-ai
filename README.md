@@ -156,19 +156,6 @@ The system will automatically generate a research report.
 
 ---
 
-# Example Topics
-
-You can try the system with topics such as:
-
-- Vehicle dynamics
-- Reinforcement learning in robotics
-- Autonomous driving
-- Multi-robot navigation
-- Large language model agents
-- AI for healthcare
-
----
-
 # Output
 
 The system produces a structured research report containing:
