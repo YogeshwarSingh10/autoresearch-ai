@@ -11,24 +11,26 @@ client = OpenAI(
 )
 
 EXECUTOR_THRESHOLD=0.65
+
 def format_papers(papers):
 
-    formatted = ""
+    lines = []
 
     for i, paper in enumerate(papers, 1):
 
         authors = ", ".join(paper.get("authors", []))
 
-        formatted += f"""
+        lines.append(
+            f"""
 Paper {i}
 Title: {paper['title']}
 Authors: {authors}
 Summary: {paper['summary']}
 URL: {paper['url']}
-
 """
+        )
 
-    return formatted
+    return "\n".join(lines)
 
 
 def format_memory(memory_hits):
@@ -60,19 +62,33 @@ def executor_agent(papers, memory: MemoryManager):
     # -------------------------
 
     system_prompt = """
-You are a Research Analysis Agent in a multi-agent research system.
-
-Your task is to analyze academic papers and produce structured research insights.
-
-You must produce:
-
-1. Literature Review
-2. Comparison Table
-3. Key Insights
-4. Research Gaps
-
-Use both the retrieved papers and memory papers if useful.
-"""
+    You are a Research Analysis Agent in a multi-agent research system.
+    
+    Your role is to deeply analyze academic papers and extract structured insights.
+    
+    Produce a detailed analysis with the following sections:
+    
+    1. Paper Summaries
+       - 3–5 sentence explanation of each paper's key idea and contribution.
+    
+    2. Literature Themes
+       - Identify major approaches or categories across papers.
+    
+    3. Method Comparison
+        Return a markdown table with columns:
+        | Paper | Method | Dataset | Strength | Limitation |
+    
+    4. Key Insights
+       - Important takeaways emerging from the literature.
+    
+    5. Research Gaps
+       - Missing work, unresolved challenges, or limitations.
+    
+    Important rules:
+    - Use evidence from the papers.
+    - Avoid repeating the same information.
+    - Focus on synthesis, not just restating summaries.
+    """
 
     user_prompt = f"""
 Analyze the following papers.
