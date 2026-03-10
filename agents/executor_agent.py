@@ -69,7 +69,7 @@ def executor_agent(papers, memory: MemoryManager):
     Produce a detailed analysis with the following sections:
     
     1. Paper Summaries
-       - 3–5 sentence explanation of each paper's key idea and contribution.
+       - 3-5 sentence explanation of each paper's key idea and contribution.
     
     2. Literature Themes
        - Identify major approaches or categories across papers.
