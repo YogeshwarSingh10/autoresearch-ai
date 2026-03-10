@@ -2,7 +2,7 @@ import os
 import json
 from openai import OpenAI
 
-from memory.memory_manager import MemoryManager
+from memory.memory_manager import store_many, search_memory
 from tools.search import search_arxiv
 
 
@@ -46,7 +46,7 @@ Return ONLY valid JSON in this format:
         return []
 
 
-def retriever_agent(planner_output, memory: MemoryManager):
+def retriever_agent(planner_output):
 
     print("\nExtracting search queries...\n")
 
@@ -65,12 +65,11 @@ def retriever_agent(planner_output, memory: MemoryManager):
         print(f"\nProcessing query: {query}\n")
 
         # STEP 1 — check memory
-        memory_hits = memory.search(query)
+        memory_hits = search_memory(query)
 
         print(f"Memory hits: {len(memory_hits)}")
 
         if memory_hits:
-
             print("Found papers in memory")
 
             papers = [
@@ -83,13 +82,12 @@ def retriever_agent(planner_output, memory: MemoryManager):
             ]
 
         else:
-
             print("Searching arXiv")
 
-            papers = search_arxiv(query, max_results=5)
+            papers = search_arxiv(query, max_results=2)
 
             # STEP 2 — store new papers in memory
-            memory.store_many(papers)
+            store_many(papers)
 
         for p in papers:
             if p["url"] not in {x["url"] for x in all_papers}:

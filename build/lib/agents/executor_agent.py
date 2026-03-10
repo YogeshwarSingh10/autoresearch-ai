@@ -1,6 +1,8 @@
 import os
 from openai import OpenAI
 
+from memory.memory_manager import search_memory
+
 
 # Groq API client
 client = OpenAI(
@@ -46,7 +48,7 @@ URL: {item['metadata']['url']}
     return formatted
 
 
-def executor_agent(papers, memory):
+def executor_agent(papers):
 
     papers_text = format_papers(papers)
 
@@ -55,11 +57,9 @@ def executor_agent(papers, memory):
     # -------------------------
 
     query = papers[0]["title"] if papers else ""
-
-    memory_hits = memory.search(query)[:2] if query else []
+    memory_hits = search_memory(query)[:2] if query else []
 
     print(f"\nExecutor memory hits: {len(memory_hits)}\n")
-
     memory_text = format_memory(memory_hits) if memory_hits else ""
 
     # -------------------------

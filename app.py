@@ -1,9 +1,11 @@
 import streamlit as st
 
-from agents.plannner_agent import planner_agent
-from agents.retreiver_agent import retriever_agent
+from agents.planner_agent import planner_agent
+from agents.retriever_agent import retriever_agent
 from agents.executor_agent import executor_agent
 from agents.critic_agent import critic_agent
+
+from memory.memory_manager import MemoryManager
 
 
 st.set_page_config(
@@ -29,86 +31,113 @@ if st.button("🚀 Start Research"):
 
     progress = st.progress(0)
 
+    # initialize memory
+    memory = MemoryManager()
+
+    # ensure fresh memory each run
+    memory.reset()
+
     with st.spinner("Agents are working..."):
 
         # ------------------
         # Planner
         # ------------------
 
-        st.subheader("🧠 Planner Agent")
-
         plan = planner_agent(topic)
-
-        st.code(plan)
-
-        progress.progress(25)
-
+        progress.progress(20)
 
         # ------------------
         # Retriever
         # ------------------
 
-        st.subheader("📚 Retriever Agent")
+        papers = retriever_agent(plan, memory)
+        progress.progress(40)
 
-        papers = retriever_agent(plan)
+        # ------------------
+        # Store in memory
+        # ------------------
 
-        progress.progress(50)
+        if papers:
+            memory.store_many(papers)
 
-        if len(papers) == 0:
-            st.warning("No papers found.")
-        else:
-            for paper in papers:
+        # retrieve relevant context
+        memory_context = memory.search(topic)
 
-                with st.container():
-
-                    st.markdown(f"### {paper['title']}")
-
-                    if "authors" in paper:
-                        st.write("**Authors:**", ", ".join(paper["authors"]))
-
-                    if "published" in paper:
-                        st.write("Published:", paper["published"])
-
-                    st.write(paper["summary"][:300] + "...")
-
-                    st.markdown(f"[📄 Read Paper]({paper['url']})")
-
-                    st.divider()
-
+        progress.progress(60)
 
         # ------------------
         # Executor
         # ------------------
 
-        st.subheader("⚙ Executor Agent")
+        analysis = executor_agent(papers, memory)
 
-        analysis = executor_agent(papers)
-
-        st.write(analysis)
-
-        progress.progress(75)
-
+        progress.progress(80)
 
         # ------------------
         # Critic
         # ------------------
 
-        st.subheader("🧾 Critic Agent")
-
         final_report = critic_agent(analysis)
-
-        st.write(final_report)
 
         progress.progress(100)
 
 
-        # ------------------
-        # Download Button
-        # ------------------
+    # ===============================
+    # FINAL REPORT (MAIN UI)
+    # ===============================
 
-        st.download_button(
-            label="⬇ Download Research Report",
-            data=final_report,
-            file_name="research_report.txt",
-            mime="text/plain"
-        )
+    st.header("📄 Final Research Report")
+    st.markdown(final_report)
+
+    st.download_button(
+        label="⬇ Download Research Report",
+        data=final_report,
+        file_name="research_report.txt",
+        mime="text/plain"
+    )
+
+
+    # ===============================
+    # DEBUG / THINKING PANEL
+    # ===============================
+
+    with st.expander("🧠 Show Agent Reasoning"):
+
+        st.subheader("Planner Output")
+        st.code(plan)
+
+        st.subheader("Retrieved Papers")
+
+        if papers:
+            for paper in papers:
+
+                title = paper.get("title", "")
+                summary = paper.get("summary", "")
+                url = paper.get("url", "")
+
+                st.write("Title:", title)
+                st.write("Summary:", summary[:200])
+                st.write("URL:", url)
+
+                st.divider()
+        else:
+            st.write("No papers retrieved.")
+
+        st.subheader("Memory Context Used")
+
+        if memory_context:
+            for item in memory_context:
+
+                text = item.get("text", "")
+                metadata = item.get("metadata", {})
+
+                st.write("Title:", metadata.get("title", ""))
+                st.write("Snippet:", text[:200])
+                st.write("URL:", metadata.get("url", ""))
+
+                st.divider()
+        else:
+            st.write("No relevant memory retrieved.")
+
+        st.subheader("Executor Analysis")
+        st.write(analysis)

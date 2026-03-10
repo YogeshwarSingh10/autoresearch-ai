@@ -1,26 +1,32 @@
 from memory.vector_store import VectorStore
 
-vector_db = VectorStore()
 
+class MemoryManager:
 
-def store_paper(paper):
+    def __init__(self):
 
-    text = paper["title"] + " " + paper["summary"]
+        self.vector_db = VectorStore()
 
-    metadata = {
-        "title": paper["title"],
-        "url": paper["url"]
-    }
+    def store_paper(self, paper):
 
-    vector_db.add(text, metadata)
+        text = paper["title"] + " " + paper["summary"]
 
+        metadata = {
+            "title": paper["title"],
+            "url": paper["url"]
+        }
 
-def store_many(papers):
+        self.vector_db.add(text, metadata)
 
-    for p in papers:
-        store_paper(p)
+    def store_many(self, papers):
 
+        for paper in papers:
+            self.store_paper(paper)
 
-def search_memory(query):
+    def search(self, query, k=3):
 
-    return vector_db.search(query)
+        return self.vector_db.search(query, k)
+
+    def reset(self):
+
+        self.vector_db.reset()

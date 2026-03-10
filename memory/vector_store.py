@@ -9,7 +9,8 @@ class VectorStore:
 
         self.model = SentenceTransformer("all-MiniLM-L6-v2")
 
-        self.index = faiss.IndexFlatL2(384)
+        dim = 384
+        self.index = faiss.IndexFlatL2(dim)
 
         self.documents = []
 
@@ -19,7 +20,10 @@ class VectorStore:
 
         self.index.add(np.array([embedding]).astype("float32"))
 
-        self.documents.append({"text": text, "metadata": metadata})
+        self.documents.append({
+            "text": text,
+            "metadata": metadata
+        })
 
     def search(self, query, k=3):
 
@@ -29,17 +33,21 @@ class VectorStore:
         query_embedding = self.model.encode([query])[0]
 
         distances, indices = self.index.search(
-            np.array([query_embedding]).astype("float32"), k
+            np.array([query_embedding]).astype("float32"),
+            k
         )
 
         results = []
 
         for i in indices[0]:
-            if i == -1:
-                continue
-            if i >= len(self.documents):
+
+            if i < 0 or i >= len(self.documents):
                 continue
 
             results.append(self.documents[i])
 
         return results
+
+    def reset(self):
+        self.index.reset()
+        self.documents = []
