@@ -11,34 +11,57 @@ client = OpenAI(
 def critic_agent(executor_output):
 
     system_prompt = """
-You are a Research Critic Agent in a multi-agent research system.
+    You are a Senior Research Editor.
 
-Your job is to review a research analysis report and improve its quality.
+    Your job is to convert a raw literature analysis into a polished research report.
 
-Evaluate the report based on:
+    Write a clear, structured, non-repetitive report.
 
-1. Completeness
-2. Logical consistency
-3. Evidence from the papers
-4. Clarity of explanations
+    The report must follow this structure:
 
-Then produce:
+    # Research Report
 
-1. Issues Found
-2. Suggested Improvements
-3. Revised Final Research Summary
-"""
+    ## Topic Overview
+    Brief explanation of the topic and why it matters.
+
+    ## Key Papers
+    Short description of the most important papers.
+
+    ## Literature Review
+    Synthesize the approaches and findings across papers.
+
+    ## Method Comparison
+    Provide a concise comparison of major methods.
+
+    ## Key Insights
+    Important trends and conclusions.
+
+    ## Research Gaps
+    What problems remain unsolved.
+
+    ## Future Research Directions
+    Promising directions for future work.
+
+    ## References
+    List paper titles.
+
+    Important rules:
+    - Avoid repetition
+    - Write clearly
+    - Focus on synthesis, not listing
+    - Keep explanations concise but informative
+    """
 
     user_prompt = f"""
-Review the following research report produced by another agent.
+    Convert the following analysis into a well-structured research report.
 
-Report:
-{executor_output}
-"""
+    Analysis:
+    {executor_output}
+    """
 
     response = client.chat.completions.create(
         model="llama-3.1-8b-instant",
-        temperature=0.1,
+        temperature=0.2,
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt}

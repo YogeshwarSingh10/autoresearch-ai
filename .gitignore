@@ -1,17 +1,41 @@
-# Python
+# Python cache
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
 
-# Virtual environments
+# Build
+*.egg-info/
+.eggs/
+dist/
+build/
+*.egg
+pip-wheel-metadata/
+
+# Envs
 venv/
-.env/
 .venv/
+env/
+ENV/
+.env
 
-# VSCode
+# Env files
+.env.*
+!.env.example
+
+# Editors
 .vscode/
+.idea/
 
-# OS files
+# OS
 .DS_Store
 Thumbs.db
+
+# Archives
+*.tar
+*.tar.gz
+*.tar.bz2
+*.zip
+*.conda
+
+# Logs
+*.log

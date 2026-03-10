@@ -1,137 +1,169 @@
+from dotenv import load_dotenv
 import streamlit as st
 
 from agents.planner_agent import planner_agent
 from agents.retriever_agent import retriever_agent
 from agents.executor_agent import executor_agent
 from agents.critic_agent import critic_agent
-
 from memory.memory_manager import MemoryManager
 
+load_dotenv()
 
 st.set_page_config(
     page_title="AutoResearch AI",
-    page_icon="🔬",
+    page_icon="assets/logo.png",
     layout="wide"
 )
 
-st.title("🔬 AutoResearch AI")
-st.markdown("### Multi-Agent Research Assistant")
+# ---------------------------
+# Session State
+# ---------------------------
 
-topic = st.text_input(
-    "Enter Research Topic",
-    placeholder="Example: Hallucination detection in Large Language Models"
-)
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+if "history" not in st.session_state:
+    st.session_state.history = []
+
+if "memory" not in st.session_state:
+    st.session_state.memory = MemoryManager()
+
+# ---------------------------
+# Sidebar
+# ---------------------------
+
+with st.sidebar:
+
+    col1, col2 = st.columns([1,3])
+    with col1:
+        st.image("assets/logo.png", width=60)
+    with col2:
+        st.markdown("### AutoResearch AI")
+
+    if st.button("➕ New Research"):
+        st.session_state.messages = []
+
+    st.markdown("---")
+    st.subheader("Previous Topics")
+
+    if st.session_state.history:
+        for h in reversed(st.session_state.history):
+            st.write("•", h)
+    else:
+        st.caption("No previous topics yet")
+
+# ---------------------------
+# Main Page
+# ---------------------------
+
+# and for the main page title section
+col1, col2 = st.columns([1,10], vertical_alignment="center")
+
+with col1:
+    st.image("assets/logo.png", width=70)
+
+with col2:
+    st.title("AutoResearch AI")
+    st.caption("Multi-Agent Research Assistant")
 
 
-if st.button("🚀 Start Research"):
+# ---------------------------
+# Show chat history
+# ---------------------------
 
-    if topic.strip() == "":
-        st.warning("Please enter a research topic.")
-        st.stop()
+for msg in st.session_state.messages:
+    with st.chat_message(msg["role"]):
+        st.markdown(msg["content"])
 
-    progress = st.progress(0)
 
-    # initialize memory
-    memory = MemoryManager()
+# ---------------------------
+# Chat input
+# ---------------------------
 
-    # ensure fresh memory each run
-    memory.reset()
+topic = st.chat_input("Enter a research topic...")
 
-    with st.spinner("Agents are working..."):
+if topic:
 
-        # ------------------
+    st.session_state.history.append(topic)
+
+    # Show user message
+    st.session_state.messages.append({"role": "user", "content": topic})
+
+    with st.chat_message("user"):
+        st.markdown(topic)
+
+    memory = st.session_state.memory
+
+    # Assistant message container
+    with st.chat_message("assistant"):
+
+        status = st.status("Running research agents...", expanded=True)
+
+        # ---------------------------
         # Planner
-        # ------------------
-
+        # ---------------------------
+        status.write("📋 Planning research tasks...")
         plan = planner_agent(topic)
-        progress.progress(20)
 
-        # ------------------
+        # ---------------------------
         # Retriever
-        # ------------------
-
+        # ---------------------------
+        status.write("📚 Retrieving relevant papers...")
         papers = retriever_agent(plan, memory)
-        progress.progress(40)
 
-        # ------------------
-        # Store in memory
-        # ------------------
-
-        if papers:
-            memory.store_many(papers)
-
-        # retrieve relevant context
-        memory_context = memory.search(topic)
-
-        progress.progress(60)
-
-        # ------------------
+        # ---------------------------
         # Executor
-        # ------------------
-
+        # ---------------------------
+        status.write("🔎 Analyzing papers...")
         analysis = executor_agent(papers, memory)
 
-        progress.progress(80)
-
-        # ------------------
+        # ---------------------------
         # Critic
-        # ------------------
-
+        # ---------------------------
+        status.write("📝 Generating final research report...")
         final_report = critic_agent(analysis)
 
-        progress.progress(100)
+        status.update(label="✅ Research complete", state="complete")
 
+        # ---------------------------
+        # Display report
+        # ---------------------------
 
-    # ===============================
-    # FINAL REPORT (MAIN UI)
-    # ===============================
+        st.markdown(final_report)
 
-    st.header("📄 Final Research Report")
-    st.markdown(final_report)
+        st.download_button(
+            label="⬇ Download Report",
+            data=final_report,
+            file_name="research_report.md",
+            mime="text/markdown"
+        )
 
-    st.download_button(
-        label="⬇ Download Research Report",
-        data=final_report,
-        file_name="research_report.txt",
-        mime="text/plain"
+        # ---------------------------
+        # Papers section
+        # ---------------------------
+
+        with st.expander("📚 Sources"):
+            if papers:
+                for paper in papers:
+                    st.markdown(f"**{paper.get('title','')}**")
+                    st.write(paper.get("summary", "")[:300] + "...")
+                    st.link_button("Open Paper", paper.get("url",""))
+                    st.divider()
+            else:
+                st.write("No papers retrieved.")
+
+        # ---------------------------
+        # Reasoning section
+        # ---------------------------
+
+        with st.expander("⚙ Agent Reasoning"):
+            st.subheader("Planner Output")
+            st.code(plan)
+
+            st.subheader("Executor Analysis")
+            st.markdown(analysis)
+
+    # Save assistant response to history
+    st.session_state.messages.append(
+        {"role": "assistant", "content": final_report}
     )
-
-
-    # ===============================
-    # DEBUG / THINKING PANEL
-    # ===============================
-
-    with st.expander("🧠 Show Agent Reasoning"):
-
-        st.subheader("Planner Output")
-        st.code(plan)
-
-        st.subheader("Retrieved Papers")
-
-        if papers:
-            for paper in papers:
-
-                title = paper.get("title", "")
-                summary = paper.get("summary", "")
-                url = paper.get("url", "")
-
-                st.write("Title:", title)
-                st.write("Summary:", summary[:200])
-                st.write("URL:", url)
-
-                st.divider()
-        else:
-            st.write("No papers retrieved.")
-
-        st.subheader("Memory Context Used")
-        if memory_context:
-            for item in memory_context:
-                st.write("Title:", item.get("title", ""))
-                st.write("Snippet:", (item.get("content", ""))[:200])
-                st.write("URL:", item.get("source", ""))
-                st.divider()
-        else:
-            st.write("No relevant memory retrieved.")
-
-        st.subheader("Executor Analysis")
-        st.write(analysis)

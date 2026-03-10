@@ -1,3 +1,5 @@
+import hashlib
+from typing import Dict
 import uuid
 
 from memory.embeddings import get_embedding
@@ -10,20 +12,14 @@ class MemoryManager:
 
         self.vector_db = VectorStore(embedding_dimension=384)
 
+    def _make_id(self, url: str) -> str:
+        return hashlib.sha1(url.encode()).hexdigest()
+
     def store_paper(self, paper):
 
-        # text = paper["title"] + " " + paper["summary"]
-
-        # metadata = {
-        #     "title": paper["title"],
-        #     "url": paper["url"]
-        # }
-
-        # self.vector_db.add(text, metadata)
         text = f'{paper["title"]} {paper["summary"]}'
-        
         document = {
-            "id": str(uuid.uuid4()),
+            "id": self._make_id(paper.get("url", text)),
             "content": text,
             "title": paper["title"],
             "source": paper.get("url", ""),
@@ -38,11 +34,8 @@ class MemoryManager:
 
     def store_many(self, papers):
 
-        # for paper in papers:
-        #     self.store_paper(paper)
         if not papers:
-            return
-        
+            return    
         documents = []
         embeddings = []
         
@@ -50,7 +43,7 @@ class MemoryManager:
             text = f'{paper["title"]} {paper["summary"]}'
         
             document = {
-                "id": str(uuid.uuid4()),
+                "id": self._make_id(paper.get("url", text)),
                 "content": text,
                 "title": paper["title"],
                 "source": paper.get("url", ""),
@@ -70,5 +63,4 @@ class MemoryManager:
         return self.vector_db.search(query_embedding, top_k=k)
 
     def reset(self):
-
         self.vector_db.reset()

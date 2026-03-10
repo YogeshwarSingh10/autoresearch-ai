@@ -1,3 +1,4 @@
+import hashlib
 import os
 from typing import List, Dict, Any, Optional
 from dotenv import load_dotenv
@@ -108,6 +109,15 @@ class AzureAISearchVectorStore:
         except Exception:
             self.create_index()
 
+
+    def _document_exists(self, doc_id: str) -> bool:
+        """Check if a document already exists in the index."""
+        try:
+            self.search_client.get_document(key=doc_id)
+            return True
+        except Exception:
+            return False
+
     def add_documents(
         self, documents: List[Dict[str, Any]], embeddings: List[List[float]]
     ) -> None:
@@ -126,7 +136,7 @@ class AzureAISearchVectorStore:
             }
             docs_to_upload.append(upload_doc)
 
-        result = self.search_client.upload_documents(documents=docs_to_upload)
+        result = self.search_client.merge_or_upload_documents(documents=docs_to_upload)
         print(
             f"Uploaded {len(docs_to_upload)} documents. Succeeded: {len([r for r in result if r.succeeded])}"
         )
@@ -143,7 +153,7 @@ class AzureAISearchVectorStore:
         vector_query = VectorizedQuery(
             vector=query_embedding, k_nearest_neighbors=top_k, fields="embedding"
         )
-        
+
         results = self.search_client.search(
             search_text=None, vector_queries=[vector_query], filter=filters, top=top_k
         )
