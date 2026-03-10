@@ -75,7 +75,6 @@ Final Research Report
 research-agent-hackathon
 │
 ├── app.py                  # Main UI entry point
-├── main.py                 # Legacy CLI entry (not used)
 │
 ├── agents                  # Agent implementations
 │   ├── planner_agent.py
@@ -88,12 +87,9 @@ research-agent-hackathon
 │   ├── embeddings.py
 │   └── vector_store.py
 │
-├── tools                   # Research utilities
-│   ├── search.py           # Paper search (arXiv)
-│   ├── scrape.py           # Paper content extraction
-│   └── summarize.py        # Paper summarization
-│
-└── research_report.txt     # Example generated report
+└── tools                   # Research utilities
+    ├── search.py           # Paper search (arXiv)
+    └── scrape.py           # Paper content extraction
 ```
 
 ---
@@ -133,6 +129,7 @@ pip install -e .
 Create a `.env` file in the project root and add:
 
 ```
+GROQ_API_KEY=your_api_key
 AZURE_SEARCH_ENDPOINT=your_endpoint
 AZURE_SEARCH_API_KEY=your_api_key
 AZURE_SEARCH_INDEX_NAME=research-papers
@@ -147,7 +144,7 @@ These variables are required for the vector search system used to store and retr
 Start the application:
 
 ```bash
-python app.py
+streamlit run app.py
 ```
 
 A UI will open where you can enter a research topic.
@@ -166,13 +163,6 @@ The system produces a structured research report containing:
 - Identified research gaps
 - Suggested future research directions
 
-An example output is saved in:
-
-```
-research_report.txt
-```
-
----
 
 # Use Cases
 
